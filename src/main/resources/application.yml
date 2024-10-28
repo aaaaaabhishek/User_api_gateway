@@ -1,0 +1,32 @@
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: user-service
+          uri: http://localhost:8081  # URL of your user service
+          predicates:
+#            - Path=/auth/register  # Path for registration
+        - id: Ecom_Booking_Service
+          uri: lb://Ecom_Booking_Service
+          predicates:
+        - Path=/restaurant/**
+      filters:
+        - AuthenticationFilter
+        - id: Ecom_User_Service
+          uri: lb://Ecom_User_Service
+          predicates:
+          - Path=/auth/**
+        - id: Eco_Delivery_service
+          uri: lb://Ecom_User_Service
+          predicates:
+             - Path=/auth/**
+  application:
+    name: Ecommerce-GATEWAY
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
